@@ -1,0 +1,344 @@
+﻿<Page x:Class="PressHmi.View.StateMonitorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PressHmi.View"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      xmlns:conv="clr-namespace:PressHmi.View.Converters" 
+      xmlns:SciChart="http://schemas.abtsoftware.co.uk/scichart"
+      mc:Ignorable="d"
+      d:DesignHeight="591" d:DesignWidth="944"
+      Title="StateMonitorPage">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding UnloadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Page.Resources>
+        <Style x:Key="FontAwesome">
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/PressHmi;component/View/FontAwesome/#FontAwesome" />
+        </Style>
+
+        <conv:BoolVisibleConverter x:Key="_bvc"/>
+        <conv:BoolConverter x:Key="_bc"/>
+        <conv:CylinderModeStringConverter x:Key="_cmsc"/>
+        <conv:LoaderStateStringConverter x:Key="_lssc"/>
+        <conv:WorkStepStringConverter x:Key="_wssc"/>
+        <conv:WorkTimeStringConverter x:Key="_wtsc"/>
+        <conv:AutoRangeConverter x:Key="_arc"/>
+    </Page.Resources>
+
+    <Border CornerRadius="3" Background="{DynamicResource ContentPanelBackground}" Margin="2,3,2,3">
+        <Grid Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="50*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="下行延时(s)"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="Transparent">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.DownDelayTime}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="下行时间(s)"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="Transparent">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.DownTime}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="保压倒计时(s)"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="Transparent">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.SavePressureCount}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="上行延时(s)"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="Transparent">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.UpDelayTime}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="上行时间(s)"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelNormalBackground}" Background="Transparent">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.UpTime}"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Style="{StaticResource btn-primary}" FontSize="{StaticResource TextPrimerSize}" Height="60" Width="120" Grid.Row="1" Content="开始绘制" IsEnabled="{Binding StateMonitorInfo.LineChartFlag,Converter={StaticResource _bc}}" Command="{Binding StartSciChartCmd}"/>
+                    <Button Style="{StaticResource btn-warning}" FontSize="{StaticResource TextPrimerSize}" Height="60" Width="120" Grid.Row="2" Content="停止绘制"  Command="{Binding StopSciChartCmd}"/>
+                </Grid>
+
+
+                <Grid Grid.Row="1" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="0" Margin="1,1,1,0" 
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="Transparent">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="black" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="油缸模式"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="0" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="yellow">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.CylinderMode,Converter={StaticResource _cmsc}}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="2" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="0" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="Transparent">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="black" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="送料机械手"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="0" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="#FF08DE08">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.LoaderState,Converter={StaticResource _lssc}}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="3" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="0" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="Transparent">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="black" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="工作步骤"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="0" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="yellow">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.WorkStep,Converter={StaticResource _wssc}}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="4" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="0" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="Transparent">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="black" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="工作节拍"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="0" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource ContentPanelPrimerBackground}" Background="#FF08DE08">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding StateMonitorInfo.WorkTime,Converter={StaticResource _wtsc}}"/>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <SciChart:SciChartSurface Grid.Column="1" Name="Plotter" SciChart:ThemeManager.Theme="ExpressionLight" Background="Transparent">
+
+                    <SciChart:SciChartSurface.RenderableSeries>
+                        <SciChart:FastLineRenderableSeries DataSeries="{Binding PosSeries}" SeriesColor="#c23531" StrokeThickness="4" YAxisId="PS1_POS" Visibility="{Binding Series1Visible,Converter={StaticResource _bvc}}" IsVisible="{Binding Series1Visible}"/>
+                        <SciChart:FastLineRenderableSeries DataSeries="{Binding SpeedSeries}" SeriesColor="#2f4554" StrokeThickness="4" YAxisId="PS1_SPEED" Visibility="{Binding Series2Visible,Converter={StaticResource _bvc}}" IsVisible="{Binding Series2Visible}"/>
+                        <SciChart:FastLineRenderableSeries DataSeries="{Binding TemSeries}" SeriesColor="#61a0a8" StrokeThickness="4" YAxisId="PS1_TEM" Visibility="{Binding Series3Visible,Converter={StaticResource _bvc}}" IsVisible="{Binding Series3Visible}"/>
+                        <SciChart:FastLineRenderableSeries DataSeries="{Binding PressSeries}" SeriesColor="#d48265" StrokeThickness="4" YAxisId="PS1_PRESS" Visibility="{Binding Series4Visible,Converter={StaticResource _bvc}}" IsVisible="{Binding Series4Visible}"/>
+                    </SciChart:SciChartSurface.RenderableSeries>
+
+                    <!-- Create an X Axis -->
+                    <SciChart:SciChartSurface.XAxis>
+                        <SciChart:NumericAxis AutoRange="{Binding ChartAutoChecked,Converter={StaticResource _arc}}" DrawMinorTicks="False" DrawMinorGridLines="False" Visibility="Visible" TextFormatting="0" 
+                                              Style="{StaticResource SciChartAxisStyle}" TickLabelStyle="{StaticResource SciChartAxisLabelStyle}">
+                            <SciChart:NumericAxis.GrowBy>
+                                <SciChart:DoubleRange Min="0.1" Max="0.1"/>
+                            </SciChart:NumericAxis.GrowBy>
+                        </SciChart:NumericAxis>
+                    </SciChart:SciChartSurface.XAxis>
+
+                    <!-- Create an Y Axes -->
+                    <SciChart:SciChartSurface.YAxes>
+                        <SciChart:NumericAxis Id="PS1_POS" AxisTitle="位移(mm)"  AutoRange="{Binding ChartAutoChecked,Converter={StaticResource _arc}}" AxisAlignment="Left" Style="{StaticResource SciChartAxisStyle}" TickLabelStyle="{StaticResource SciChartAxisLabelStyle}"
+                                              BorderBrush="#c23531" BorderThickness="0,0,1,0" Visibility="{Binding Series1Visible,Converter={StaticResource _bvc}}"
+                                              DrawMinorTicks="False" DrawMinorGridLines="False" TextFormatting="0.00" 
+                                              TickTextBrush="#c23531">
+                            <SciChart:NumericAxis.GrowBy>
+                                <SciChart:DoubleRange Min="0.1" Max="0.1"/>
+                            </SciChart:NumericAxis.GrowBy>
+                        </SciChart:NumericAxis>
+
+
+                        <SciChart:NumericAxis Id="PS1_SPEED" AxisTitle="速度(mm/s)" AutoRange="{Binding ChartAutoChecked,Converter={StaticResource _arc}}" AxisAlignment="Left" 
+                                              Style="{StaticResource SciChartAxisStyle}" TickLabelStyle="{StaticResource SciChartAxisLabelStyle}"
+                                              BorderBrush="#2f4554" BorderThickness="0,0,1,0"  Visibility="{Binding Series2Visible,Converter={StaticResource _bvc}}"
+                                              DrawMinorTicks="False" DrawMinorGridLines="False" TextFormatting="0.00"
+                                              TickTextBrush="#2f4554">
+                            <SciChart:NumericAxis.GrowBy>
+                                <SciChart:DoubleRange Min="0.1" Max="0.1"/>
+                            </SciChart:NumericAxis.GrowBy>
+                        </SciChart:NumericAxis>
+
+                        <SciChart:NumericAxis Id="PS1_TEM" AxisTitle="温度(℃)" AutoRange="{Binding ChartAutoChecked,Converter={StaticResource _arc}}" AxisAlignment="Right" 
+                                              Style="{StaticResource SciChartAxisStyle}" TickLabelStyle="{StaticResource SciChartAxisLabelStyle}"
+                                              BorderBrush="#61a0a8" BorderThickness="0,0,1,0" Visibility="{Binding Series3Visible,Converter={StaticResource _bvc}}"
+                                              DrawMinorTicks="False" DrawMinorGridLines="False" TextFormatting="0.00"
+                                              TickTextBrush="#61a0a8">
+                            <SciChart:NumericAxis.GrowBy>
+                                <SciChart:DoubleRange Min="0.1" Max="0.1"/>
+                            </SciChart:NumericAxis.GrowBy>
+                        </SciChart:NumericAxis>
+
+                        <SciChart:NumericAxis Id="PS1_PRESS" AxisTitle="压力(MPa)" AutoRange="{Binding ChartAutoChecked,Converter={StaticResource _arc}}" AxisAlignment="Right" 
+                                              Style="{StaticResource SciChartAxisStyle}" TickLabelStyle="{StaticResource SciChartAxisLabelStyle}"
+                                              BorderBrush="#d48265" BorderThickness="0,0,1,0" Visibility="{Binding Series4Visible,Converter={StaticResource _bvc}}"
+                                              DrawMinorTicks="False" DrawMinorGridLines="False" TextFormatting="0.00"
+                                              TickTextBrush="#d48265">
+                            <SciChart:NumericAxis.GrowBy>
+                                <SciChart:DoubleRange Min="0.1" Max="0.1"/>
+                            </SciChart:NumericAxis.GrowBy>
+                        </SciChart:NumericAxis>
+                    </SciChart:SciChartSurface.YAxes>
+
+                    <SciChart:SciChartSurface.ChartModifier>
+                        <SciChart:ModifierGroup>
+                            <SciChart:RubberBandXyZoomModifier IsXAxisOnly="False" 
+                                                                   ZoomExtentsY="True" 
+                                                                   IsAnimated="True" 
+                                                                   RubberBandFill="#55FFFFFF" 
+                                                                   RubberBandStroke="#FFFFFFFF" RubberBandStrokeDashArray="2 2"
+                                                                   IsEnabled="{Binding ChartZoomChecked}"/>
+
+                            <SciChart:ZoomPanModifier x:Name="zoomPanModifier" ReceiveHandledEvents="True" IsEnabled="{Binding ChartMoveChecked}"/>
+                            <SciChart:MouseWheelZoomModifier x:Name="mouseWheelZoomModifier" IsEnabled="True"/>
+                            <SciChart:ZoomExtentsModifier ExecuteOn="MouseDoubleClick" IsEnabled="True"/>
+                        </SciChart:ModifierGroup>
+                    </SciChart:SciChartSurface.ChartModifier>
+
+                </SciChart:SciChartSurface>
+                <Grid Grid.Column="0" Margin="1,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ToggleButton Grid.Row="0" Content="&#xf072;" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  IsChecked="{Binding Series1Visible}" Background="Transparent"/>
+                    <ToggleButton Grid.Row="1" Content="&#xf0e4;" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  IsChecked="{Binding Series2Visible}" Background="Transparent"/>
+                    <ToggleButton Grid.Row="2" Content="&#xf0e2;" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  IsChecked="{Binding Series3Visible}" Background="Transparent"/>
+                    <ToggleButton Grid.Row="3" Content="&#xf0e3;" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  IsChecked="{Binding Series4Visible}" Background="Transparent"/>
+                    <ToggleButton Grid.Row="4" Content="A" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  Background="Transparent"
+                                  IsChecked="{Binding ChartAutoChecked}" Command="{Binding ChartAutoCmd}" />
+                    <ToggleButton Grid.Row="5" Content="&#xf047;" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  Background="Transparent"
+                                  IsChecked="{Binding ChartMoveChecked}" Command="{Binding ChartMoveCmd}" />
+                    <ToggleButton Grid.Row="6" Content="&#xf00e;" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  Background="Transparent"
+                                  IsChecked="{Binding ChartZoomChecked}" Command="{Binding ChartZoomCmd}"/>
+
+                    <ToggleButton Grid.Row="7" Content="" Style="{StaticResource SeriesButton}" Margin="1,0,1,1" Width="36" Height="60" BorderBrush="{DynamicResource ContentPanelNormalBackground}"  Background="Transparent"/>
+                </Grid>
+            </Grid>
+
+        </Grid>
+    </Border>
+
+</Page>

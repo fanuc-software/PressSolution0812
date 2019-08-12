@@ -1,0 +1,350 @@
+﻿<Window x:Class="PressHmi.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:PressHmi.View.Converters" 
+        xmlns:control="clr-namespace:PressHmi.View.Controls" 
+        xmlns:local="clr-namespace:PressHmi.View"
+        mc:Ignorable="d" AllowsTransparency="False" Background="{DynamicResource HmiBackground}"
+        Title="MainWindow" Height="768" Width="1024" ResizeMode="NoResize"
+        WindowStyle="None" BorderBrush="DarkGray" BorderThickness="0" 
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Storyboard x:Key="AlarmStoryboard" RepeatBehavior="Forever" control:StoryboardManager.ID="AlarmAnimation">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="alarmGrid">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Hidden}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <conv:LampStatusColorConverter x:Key="_lscc"/>
+        <conv:LampStatusTextConverter x:Key="_lstc"/>
+        <conv:ModeTextConverter x:Key="_mtc"/>
+        <conv:MainStatusPowerColorConverter x:Key="_mspcc"/>
+        <conv:MainStatusDiePointColorConverter x:Key="_msdcc"/>
+        <conv:MainStatusEmgColorConverter x:Key="_msecc"/>
+        <conv:MainStatusAlarmColorConverter x:Key="_msacc"/>
+        <conv:CncAlarmVisibilityConverter x:Key="_cavc"/>
+
+        <conv:BoolColorPasstiveLogicConverter x:Key="_bcc_pas"/>
+        <conv:BoolColorPositiveLogicConverter x:Key="_bcc_pos"/>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource AlarmStoryboard}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="661*"/>
+            <RowDefinition Height="36*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175*"/>
+                <ColumnDefinition Width="250*"/>
+                <ColumnDefinition Width="175*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0"
+                       Text="{Binding CncStaticInfo.WorkPartName}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextNormalSize}" />
+
+            <Button Style="{StaticResource MainAlarmNormalButton}" Content="{Binding _DisAlarm}" Visibility="{Binding CncStaticInfo.CncAlarmFlag,Converter={StaticResource _cavc}}"
+                    Grid.Row="1" Grid.Column="0" Panel.ZIndex="10" x:Name="alarmGrid" Margin="3,0,0,0" FontSize="{StaticResource TextPrimerSize}"
+                    Background="Red" Foreground="White">
+
+            </Button>
+            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Border BorderThickness="1" BorderBrush="{Binding CncStaticInfo.MainStatus_EMG,Converter={StaticResource _bcc_pos}}" Width="60" Height="24" CornerRadius="2"  Margin="0,0,5,0">
+                    <TextBlock Text="急停" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding CncStaticInfo.MainStatus_EMG,Converter={StaticResource _bcc_pos}}"/>
+                </Border>
+                <Border BorderThickness="1" BorderBrush="{Binding CncStaticInfo.MainStatus_ALM,Converter={StaticResource _bcc_pos}}" Width="60" Height="24" CornerRadius="2"  Margin="0,0,5,0">
+                    <TextBlock Text="故障" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding CncStaticInfo.MainStatus_ALM,Converter={StaticResource _bcc_pos}}"/>
+                </Border>
+                <Border BorderThickness="1" BorderBrush="{Binding CncStaticInfo.MainStatus_PN,Converter={StaticResource _bcc_pos}}" Width="60" Height="24" CornerRadius="2"  Margin="0,0,5,0">
+                    <TextBlock Text="PN通讯" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding CncStaticInfo.MainStatus_PN,Converter={StaticResource _bcc_pos}}"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"
+                       Text="{Binding _Date}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextSmallSize}" />
+                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"
+                       Text="{Binding _Time}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextSmallSize}" />
+            </StackPanel>
+
+
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="59*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Grid.Row="1">
+                <Frame   Background="Transparent" NavigationUIVisibility="Hidden" Content="{Binding _MainPanel}"></Frame>
+            </Grid>
+
+            <Grid Grid.Column="0" Grid.Row="0" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="125*"/>
+                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="60*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{Binding CncStaticInfo.LampStatus, Converter={StaticResource _lscc}}" Background="{Binding CncStaticInfo.LampStatus, Converter={StaticResource _lscc}}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="Black" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.LampStatus, Converter={StaticResource _lstc}}"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.Mode, Converter={StaticResource _mtc}}"/>
+                    </Border>
+
+                </Grid>
+
+                <Border Grid.Column="1" BorderThickness="1,1,1,1" Margin="1,1,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="使 能"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="上死点"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="下死点"/>
+                        <Ellipse Grid.Column="0" Grid.Row="1" Width="24" Height="24" Fill="{Binding CncStaticInfo.MainStatus_ServoReady,Converter={StaticResource _bcc_pas}}"/>
+                        <Ellipse Grid.Column="1" Grid.Row="1" Width="24" Height="24" Fill="{Binding CncStaticInfo.MainStatus_TopDieCenter,Converter={StaticResource _bcc_pas}}"/>
+                        <Ellipse Grid.Column="2" Grid.Row="1" Width="24" Height="24" Fill="{Binding CncStaticInfo.MainStatus_BottomDieCenter,Converter={StaticResource _bcc_pas}}"/>
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="滑块位移"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.SliderPosition}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="滑块速度"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.SliderSpeed}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="滑块压力"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.StrSliderPressure}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="平衡缸压力"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.StrBalanceCylinderPressure}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="装模高度"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.StrInstallDieHigh}"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="7">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="螺母温度"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelPrimerBackground}">
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="{Binding CncStaticInfo.StrNutTemperature}"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <WrapPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+                <!--<Grid.RowDefinitions>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="11*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                </Grid.RowDefinitions>-->
+                <ToggleButton Grid.Row="0" Style="{StaticResource MainMenuNormalButton}" Margin="3" Width="70" Height="70"
+                      Content="{Binding MainMenu1}" IsChecked="{Binding MainMenu1Cheched}" 
+                       Command="{Binding MainMenu1.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <ToggleButton Grid.Row="1" Style="{StaticResource MainMenuNormalButton}" Margin="3" Width="70" Height="70"
+                      Content="{Binding MainMenu2}" IsChecked="{Binding MainMenu2Cheched}" 
+                       Command="{Binding MainMenu2.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <ToggleButton Grid.Row="2" Style="{StaticResource MainMenuNormalButton}" Margin="3" Width="70" Height="70"
+                      Content="{Binding MainMenu3}" IsChecked="{Binding MainMenu3Cheched}" 
+                       Command="{Binding MainMenu3.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <ToggleButton Grid.Row="3" Style="{StaticResource MainMenuNormalButton}" Margin="3" Width="70" Height="70"
+                      Content="{Binding MainMenu4}" IsChecked="{Binding MainMenu4Cheched}" 
+                       Command="{Binding MainMenu4.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <ToggleButton Grid.Row="4" Style="{StaticResource MainMenuNormalButton}" Margin="3" Width="70" Height="70"
+                      Content="{Binding MainMenu5}" IsChecked="{Binding MainMenu5Cheched}" 
+                       Command="{Binding MainMenu5.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <ToggleButton Grid.Row="5" Style="{StaticResource MainMenuNormalButton}" Margin="3" Width="70" Height="70"
+                      Content="{Binding MainMenu6}" IsChecked="{Binding MainMenu6Cheched}" 
+                       Command="{Binding MainMenu6.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <Button Grid.Row="7" Style="{StaticResource MainMenuNormalNButton}" Margin="3,50,0,0" Width="70" Height="70"
+                      Content="{Binding MainMenu7}" Command="{Binding MainMenu7.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <Button Grid.Row="8" Style="{StaticResource MainMenuNormalNButton}" Margin="3"  Width="70" Height="70"
+                      Content="{Binding MainMenu8}" Command="{Binding MainMenu8.Cmd}" IsEnabled="{Binding _OperatorRole}" />
+                <TextBlock Text="{Binding OperatorRole}" Foreground="LightGray" Width="120" Height="25" FontSize="20" Margin="3"/>
+            </WrapPanel>
+
+        </Grid>
+
+        <Grid Grid.Row="3">
+
+        </Grid>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="总次数" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="{Binding CncStaticInfo.TotalPiece}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="总生产次数" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="{Binding CncStaticInfo.TotalWork}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="当日次数" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="{Binding CncStaticInfo.DayPiece}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+            </StackPanel>
+            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="当日生产次数" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
+                       Text="{Binding CncStaticInfo.DayWork}" 
+                       Foreground="{DynamicResource TextNormalForeground}" FontSize="{DynamicResource TextPrimerSize}" />
+            </StackPanel>
+
+
+        </Grid>
+
+    </Grid>
+</Window>

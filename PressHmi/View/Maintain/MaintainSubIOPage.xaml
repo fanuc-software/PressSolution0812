@@ -1,0 +1,121 @@
+﻿<Page x:Class="PressHmi.View.MaintainSubIOPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+      xmlns:conv="clr-namespace:PressHmi.View.Converters"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PressHmi.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="521" d:DesignWidth="944"
+      Title="MaintainSubIOPage">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding UnloadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Page.Resources>
+        <conv:AutoAirSourceActionFlagColorConverter x:Key="_aasafc"/>
+        <conv:AutoAirSourceArrTextConverter x:Key="_aasatc"/>
+        <conv:IOColorConverter2 x:Key="_iocc"/>
+
+        <DataTemplate x:Key="Wrapitem2">
+            <Grid  Height="24" Width="400" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Descrip}"  HorizontalAlignment="Left" Foreground="Black" TextWrapping="WrapWithOverflow"
+                FontFamily="Microsoft YaHei UI Light"  Margin="10,0,0,0"  VerticalAlignment="Center"
+                FontSize="16"/>
+                <TextBlock Grid.Column="1" Text="{Binding AdrStr}"  HorizontalAlignment="Right" Foreground="Black" TextWrapping="WrapWithOverflow"
+                FontFamily="Microsoft YaHei UI Light"  Margin="10,0,10,0"  VerticalAlignment="Center"
+                FontSize="16"/>
+                <TextBlock Grid.Column="2" Text="{Binding Value}"   Foreground="White"
+                           Background="{Binding Value,Converter={StaticResource _iocc}}"
+                            FontFamily="Microsoft YaHei UI Light"  Margin="10,0,10,0"
+                            FontSize="16"/>
+                <!--<Button Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding Value,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="{Binding Value}"/>-->
+            </Grid>
+        </DataTemplate>
+
+
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Margin="2,2,2,2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,0,0" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="设备输入"/>
+            </Border>
+            <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}">
+                <ListBox Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden"   ItemTemplate="{StaticResource Wrapitem2}"
+                                         ItemsSource="{Binding InputBom}" Foreground="White">
+                    <ListBox.Resources>
+                        <Style TargetType="ListBoxItem">
+                            <Style.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFA1A1A1"/>
+                            </Style.Resources>
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.Template>
+                        <ControlTemplate TargetType="{x:Type ListBox}">
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <WrapPanel Orientation="Vertical" IsItemsHost="True" ScrollViewer.CanContentScroll="True"/>
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ListBox.Template>
+                </ListBox>
+            </Border>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1" Margin="2,2,2,2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,0,0" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="设备输出"/>
+            </Border>
+            <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}">
+                <ListBox Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Hidden"   ItemTemplate="{StaticResource Wrapitem2}"
+                                         ItemsSource="{Binding OutputBom}" Foreground="White">
+                    <ListBox.Resources>
+                        <Style TargetType="ListBoxItem">
+                            <Style.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFA1A1A1"/>
+                            </Style.Resources>
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.Template>
+                        <ControlTemplate TargetType="{x:Type ListBox}">
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <WrapPanel Orientation="Vertical" IsItemsHost="True" ScrollViewer.CanContentScroll="True"/>
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ListBox.Template>
+                </ListBox>
+            </Border>
+        </Grid>
+
+    </Grid>
+</Page>

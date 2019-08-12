@@ -1,0 +1,250 @@
+﻿<Page x:Class="PressHmi.View.ParaSubDieHydrPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      xmlns:conv="clr-namespace:PressHmi.View.Converters"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PressHmi.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="521" d:DesignWidth="944"
+      Title="ParaSubDieHydrPage">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding UnloadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Page.Resources>
+        <Style x:Key="FontAwesome">
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/PressHmi;component/View/FontAwesome/#FontAwesome" />
+        </Style>
+
+        <conv:DieHydrRunStringConverter x:Key="_dhrsc"/>
+        <conv:DieHydrStateColorConverter x:Key="_dhscc"/>
+        <conv:DieHydrStateStringConverter x:Key="_dhssc"/>
+        <conv:IOColorConverter x:Key="_iocc"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0" Margin="2,2,2,2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,0,0"  FontSize="{StaticResource TextPrimerSize}"
+                                   Text="模具液压设定"/>
+            </Border>
+            <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="55"/>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="55"/>
+                        <RowDefinition Height="45"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="工作模式:" />
+                    <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0"  Orientation="Horizontal">
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                                Background="Gray" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="100" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="不使用" Command="{Binding ModeNoUse_SetCmd}"/>
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                                Background="Gray" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="100" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="维护" Command="{Binding ModeMaintain_SetCmd}"/>
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                                Background="Gray" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="100" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="手动" Command="{Binding ModeMaintain_SetCmd}"/>
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                                Background="Gray" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="100" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="顶出" Command="{Binding ModePush_SetCmd}"/>
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                                Background="Gray" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="100" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="拉伸" Command="{Binding ModePull_SetCmd}"/>
+                        <Button HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                                Background="Gray" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="100" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="位置学习" Command="{Binding ModePush_SetCmd}"/>
+
+                    </StackPanel>
+
+                    <Grid Grid.Column="1" Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Text="1" />
+                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Text="2" />
+                        <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Text="3" />
+                        <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Text="4" />
+                        <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Text="5" />
+                    </Grid>
+                    
+                    <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="压力设定(MPa):" />
+                    <Grid Grid.Column="1" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.Pressure1}" Tag="&#xf044;" Command="{Binding Pressure1_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.Pressure2}" Tag="&#xf044;" Command="{Binding Pressure2_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.Pressure3}" Tag="&#xf044;" Command="{Binding Pressure3_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.Pressure4}" Tag="&#xf044;" Command="{Binding Pressure4_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.Pressure5}" Tag="&#xf044;" Command="{Binding Pressure5_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                    </Grid>
+
+                    <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="压力切换位置(mm):" />
+                    <Grid Grid.Column="1" Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PressurePos1}" Tag="&#xf044;" Command="{Binding PressurePos1_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PressurePos2}" Tag="&#xf044;" Command="{Binding PressurePos2_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PressurePos3}" Tag="&#xf044;" Command="{Binding PressurePos3_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PressurePos4}" Tag="&#xf044;" Command="{Binding PressurePos4_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                        <Button Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PressurePos5}" Tag="&#xf044;" Command="{Binding PressurePos5_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                    </Grid>
+
+                    <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="顶出位置(mm):" />
+                        <TextBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40"
+                               Text="99.0" />
+                        <TextBlock Grid.Column="2"  HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="顶出延时(ms):" />
+                        <Button Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PushDelayTime}" Tag="&#xf044;" Command="{Binding PushDelayTime_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                    </Grid>
+
+                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="实际压力(MPa):" />
+                        <TextBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" IsEnabled="False"
+                               Text="{Binding ParaDieHydrInfo.ActualPressure}" />
+                        <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="实际位置(mm):" />
+                        <Button Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource ParaInputNormalButton}"
+                               Content="{Binding ParaDieHydrInfo.PushDelayTime}" Tag="&#xf044;" Command="{Binding PushDelayTime_SetCmd}" IsEnabled="{Binding _ManagerRole}" />
+                    </Grid>
+
+                    <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="系统运行指示灯:" />
+                        <Button Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                            Background="{Binding ParaDieHydrInfo.Run,Converter={StaticResource _iocc}}" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="{Binding ParaDieHydrInfo.Run,Converter={StaticResource _dhrsc}}" IsEnabled="False"/>
+                        <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0" 
+                               FontSize="{DynamicResource TextPrimerSize}"
+                               Text="系统运行状态:" />
+                        <Button Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                            Background="{Binding ParaDieHydrInfo.State,Converter={StaticResource _dhscc}}" Foreground="White"
+                               FontSize="{DynamicResource TextPrimerSize}" Width="120" Height="40" Style="{StaticResource IONormalButton}"
+                               Content="{Binding ParaDieHydrInfo.State,Converter={StaticResource _dhssc}}" IsEnabled="False"/>
+                    </Grid>
+
+
+
+
+
+
+
+                    
+                    
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</Page>

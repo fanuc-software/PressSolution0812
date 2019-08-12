@@ -1,0 +1,228 @@
+﻿<Page x:Class="PressHmi.View.MaintainSubMoveTablePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      xmlns:conv="clr-namespace:PressHmi.View.Converters"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PressHmi.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="521" d:DesignWidth="944"
+      Title="MaintainSubMoveTablePage">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding UnloadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Page.Resources>
+        <Style x:Key="FontAwesome">
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/PressHmi;component/View/FontAwesome/#FontAwesome" />
+        </Style>
+
+        <conv:AutoAirSourceActionFlagColorConverter x:Key="_aasafc"/>
+        <conv:AutoAirSourceArrTextConverter x:Key="_aasatc"/>
+        <conv:IOColorConverter x:Key="_iocc"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,0,0" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="顶起移出提示"/>
+            </Border>
+            <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Panel.ZIndex="20">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MovePump,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移台泵站正常"/>
+                    <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_EMG,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="急停正常"/>
+                    <Button Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_ChangeMode,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="换模模式"/>
+                    <Button Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_UpDieCenter,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="上死点"/>
+                    <Button Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_UpBTN,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="顶起按钮"/>
+                    <Button Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_PumpStation,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="泵站运行"/>
+                    <Button Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_OUT_Mag,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="电磁阀工作"/>
+                    <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_UpTimeOut,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="顶起超时"/>
+                    <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_UpFin,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="顶起完成"/>
+                    <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MoveAmp,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移台变频器正常"/>
+                    <Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_SafeDoorOpen,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="安全门打开"/>
+                    <Button Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MoveOutBTN,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移出按钮"/>
+                    <Button Grid.Column="1" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MoveOutFin,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移出到位"/>
+                </Grid>
+            </Border>
+            <Canvas Grid.Row="1" Panel.ZIndex="10" Margin="10">
+                <Rectangle Width="8" Canvas.Top="35" Canvas.Left="75" Height="404" Fill="Orange"/>
+                <Rectangle Width="75" Canvas.Top="431" Canvas.Left="75" Height="8" Fill="Orange"/>
+                <Rectangle Width="8" Canvas.Top="58" Canvas.Left="142" Height="381" Fill="Orange"/>
+                <Rectangle Width="246" Canvas.Top="58" Canvas.Left="142" Height="8" Fill="Orange"/>
+                <Rectangle Width="8" Canvas.Top="66" Canvas.Left="228" Height="307" Fill="Orange"/>
+                <Rectangle Width="8" Canvas.Top="58" Canvas.Left="380" Height="52" Fill="Orange"/>
+            </Canvas>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,1" Margin="1,1,1,0"
+                        BorderBrush="{DynamicResource HmiBorder}" Background="{DynamicResource ContentPanelNormalBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="10,0,0,0" FontSize="{DynamicResource TextPrimerSize}"
+                                   Text="移入夹紧提示"/>
+            </Border>
+            <Border Grid.Row="1" BorderThickness="1,0,1,1" Margin="1,0,1,1"
+                        BorderBrush="{DynamicResource HmiBorder}" Panel.ZIndex="20">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MovePump,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移台泵站正常"/>
+                    <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_EMG,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="急停正常"/>
+                    <Button Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_ChangeMode,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="换模模式"/>
+                    <Button Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_UpDieCenter,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="上死点"/>
+                    <Button Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MoveAmp,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移台变频器正常"/>
+                    <Button Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_TwinTable,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="对侧台在位"/>
+                    <Button Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_In_Mag,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="电磁阀工作"/>
+
+                    <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_SafeDoorOpen,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="安全门打开"/>
+                    <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MoveInBTN,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移入按钮"/>
+                    <Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_MoveInFin,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="移入到位"/>
+                    <Button Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_ClampBTN,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="夹紧按钮"/>
+                    <Button Grid.Column="1" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_PumpStation,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="泵站运行"/>
+                    <Button Grid.Column="1" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_In_Mag,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="电磁阀动作"/>
+                    <Button Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_ClampFin,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="夹紧完成"/>
+                    <Button Grid.Column="2" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0" 
+                        Background="{Binding MaintainMoveTableInfo.MMT_ClampTimeOut,Converter={StaticResource _iocc}}" Foreground="White"
+                        FontSize="{DynamicResource TextPrimerSize}" Width="240" Height="60" Style="{StaticResource IONormalButton}"
+                        Content="夹紧超时"/>
+                </Grid>
+
+            </Border>
+            <Canvas Grid.Row="1" Panel.ZIndex="10">
+                <Rectangle Width="7" Canvas.Top="40" Canvas.Left="85" Height="406" Fill="Orange"/>
+                <Rectangle Width="78" Canvas.Top="446" Canvas.Left="85" Height="8" Fill="Orange"/>
+                <Rectangle Width="8" Canvas.Top="69" Canvas.Left="155" Height="377" Fill="Orange"/>
+                <Rectangle Width="83" Canvas.Top="69" Canvas.Left="155" Height="7" Fill="Orange"/>
+                <Rectangle Width="8" Canvas.Top="76" Canvas.Left="230" Height="378" Fill="Orange"/>
+                <Rectangle Width="150" Canvas.Top="446" Canvas.Left="230" Height="8" Fill="Orange"/>
+                <Rectangle Width="8" Canvas.Top="375" Canvas.Left="305" Height="79" Fill="Orange"/>
+                <Rectangle Width="90" Canvas.Top="375" Canvas.Left="305" Height="8" Fill="Orange"/>
+            </Canvas>
+        </Grid>
+    </Grid>
+</Page>
